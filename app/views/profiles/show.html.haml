@@ -1,0 +1,65 @@
+%div
+  .main.panel.section
+    .header
+      /*------- STYLE NEEDED ------*/
+      = gravatar_for @user, :size => 64
+      /*------- /STYLE NEEDED ------*/
+      - if @user.admin?
+        %h2.icon.user.admin=h @user.name
+      - else
+        %h2.icon.user=h @user.name
+      - if @user.linked_to_twitter?
+        %p.icon.twitter
+          Follow me on Twitter:
+          = link_to h("@#{@user.twitter_handle}"), "http://twitter.com/#{h @user.twitter_handle}", :target => "_blank"
+    .body
+      .group.slate
+        %h3 Recent Ideas
+        - unless @user.ideas.length == 0
+          %h4
+            These are some of the ideas that
+            =h @user.name
+            created.
+          .ideas-list.inset
+            %div
+              %div
+                = render_recent :recent => 'ideas', :offset => 0, :limit => 5
+        -else
+          %h4
+            =h @user.name
+            hasn't posted any ideas yet.
+      .group.slate
+        %h3 Recent Comments
+        - unless @user.comments.length == 0
+          %h4
+            These are some of the comments that
+            =h @user.name
+            posted.
+          .inset.comments
+            %div
+              %div
+                = render_recent :recent => 'comments', :offset => 0, :limit => 8
+        - else
+          %h4
+            =h @user.name 
+            hasn't written any comments yet.
+      #votes.group.slate
+        %h3 Recent Votes
+        - unless @user.votes.length == 0
+          %h4
+            These are some of the ideas that
+            =h @user.name
+            voted for.  
+          .votes.inset
+            %div
+              %div
+                %ul.voted-for
+                  = render_recent :recent => 'votes', :offset => 0, :limit => 12
+        - else
+          %h4
+            =h @user.name
+            hasn't voted for any ideas yet.
+    .footer
+  %hr.hide
+  #sidebar.aside
+    = render :partial => "shared/sidebar"
